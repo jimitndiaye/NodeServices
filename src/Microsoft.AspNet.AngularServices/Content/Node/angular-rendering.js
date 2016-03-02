@@ -37,12 +37,22 @@ module.exports = {
             var serverBindings = [
                 ngRouter.ROUTER_BINDINGS,
                 ngUniversal.HTTP_PROVIDERS,
-                ngCore.provide(ngUniversal.BASE_URL, { useValue: options.requestUrl }),
+                // TODO: BASE_URL has been replaced by REQUEST_URL in angular2@2.0.0-beta.7
+                ngCore.provide(ngUniversal.BASE_URL, { useValue: options.requestUrl }), 
                 ngCore.provide(ngRouter.APP_BASE_HREF, { useValue: '/' }),
                 ngUniversal.SERVER_LOCATION_PROVIDERS
             ];
 
-            return ngUniversalRender.renderToString(component, serverBindings).then(
+            return (options.preboot
+                ? ngUniversalRender.renderToStringWithPreboot(component, serverBindings, {
+                    appRoot: options.tagName,
+                    freeze: { name: 'spinner' },
+                    replay: 'rerender',
+                    buffer: true,
+                    debug: true,
+                    uglify: false,
+                })
+                : ngUniversalRender.renderToString(component, serverBindings)).then(
                 function(successValue) { callback(null, successValue); },
                 function(errorValue) { callback(errorValue); }
             );

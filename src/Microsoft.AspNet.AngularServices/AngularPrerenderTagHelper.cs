@@ -15,12 +15,16 @@ namespace Microsoft.AspNet.AngularServices
 
         const string PrerenderModuleAttributeName = "asp-ng2-prerender-module";
         const string PrerenderExportAttributeName = "asp-ng2-prerender-export";
+        const string PrerenderPrebootAttributeName = "asp-ng2-prerender-preboot";
 
         [HtmlAttributeName(PrerenderModuleAttributeName)]
         public string ModuleName { get; set; }
 
         [HtmlAttributeName(PrerenderExportAttributeName)]
         public string ExportName { get; set; }
+
+        [HtmlAttributeName(PrerenderPrebootAttributeName)]
+        public string Preboot { get; set; }
 
         private IHttpContextAccessor contextAccessor;
         private INodeServices nodeServices;
@@ -43,12 +47,14 @@ namespace Microsoft.AspNet.AngularServices
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            bool preboot = false;
             var result = await AngularRenderer.RenderToString(
                 nodeServices: this.nodeServices,
                 componentModuleName: this.ModuleName,
                 componentExportName: this.ExportName,
                 componentTagName: output.TagName,
-                requestUrl: UriHelper.GetEncodedUrl(this.contextAccessor.HttpContext.Request)
+                requestUrl: UriHelper.GetEncodedUrl(this.contextAccessor.HttpContext.Request),
+                preboot: bool.TryParse(this.Preboot, out preboot) && preboot
             );
             output.SuppressOutput();
             output.PostElement.AppendHtml(result);

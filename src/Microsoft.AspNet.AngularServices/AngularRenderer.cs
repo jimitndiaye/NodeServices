@@ -13,12 +13,13 @@ namespace Microsoft.AspNet.AngularServices
             nodeScript = new StringAsTempFile(script); // Will be cleaned up on process exit
         }
 
-        public static async Task<string> RenderToString(INodeServices nodeServices, string componentModuleName, string componentExportName, string componentTagName, string requestUrl) {
+        public static async Task<string> RenderToString(INodeServices nodeServices, string componentModuleName, string componentExportName, string componentTagName, string requestUrl, bool preboot) {
             return await nodeServices.InvokeExport<string>(nodeScript.FileName, "renderToString", new {
                 moduleName = componentModuleName,
                 exportName = componentExportName,
                 tagName = componentTagName,
-                requestUrl = requestUrl
+                requestUrl = requestUrl,
+                preboot = preboot
             });
         }
     }

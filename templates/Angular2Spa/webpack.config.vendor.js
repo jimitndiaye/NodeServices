@@ -15,7 +15,15 @@ module.exports = {
         ]
     },
     entry: {
-        vendor: ['angular2/bundles/angular2-polyfills.js', 'bootstrap', 'bootstrap/dist/css/bootstrap.css', 'style-loader', 'jquery', 'angular2/core', 'angular2/common', 'angular2/http', 'angular2/router', 'angular2/platform/browser']
+        vendor: [
+            'jquery',
+            'bootstrap',
+            'bootstrap/dist/css/bootstrap.css',
+            'style-loader',
+            'angular2/bundles/angular2-polyfills',
+            'angular2/core',
+            'angular2/router'
+        ]
     },
     output: {
         path: path.join(__dirname, 'wwwroot', 'dist'),
