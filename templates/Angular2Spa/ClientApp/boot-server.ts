@@ -16,7 +16,13 @@ export default function (params: any): Promise<{ html: string, globals?: any }> 
         ngCore.provide(ngUniversal.REQUEST_URL, { useValue: params.url })
     ];
 
-    return ngUniversalRender.renderToString(App, serverBindings).then(html => {
+    return ngUniversalRender.renderToStringWithPreboot(App, serverBindings, {
+        freeze: { name: 'spinner' },
+        replay: 'rerender',
+        buffer: true,
+        debug: true,
+        uglify: false,
+    }).then(html => {
         return { html };
     });
 }
