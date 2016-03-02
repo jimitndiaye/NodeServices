@@ -6,7 +6,11 @@ module.exports = {
     createWebpackDevServer: function(callback, optionsJson) {
         var options = JSON.parse(optionsJson);
         var webpackConfig = require(options.webpackConfigPath);
-        var publicPath = (webpackConfig.output.publicPath || '').trim();
+        // var publicPath = (webpackConfig.output.publicPath || '').trim(); /*This doesn't work for multi configs*/
+        var publicPath = (
+            options.publicPath 
+            || Array.isArray(webpackConfig) ? webpackConfig[0].output.publicPath : webpackConfig.output.publicPath 
+            || '').trim();
         if (!publicPath) {
             throw new Error('To use the Webpack dev server, you must specify a value for \'publicPath\' on the \'output\' section of your webpack.config.');
         }
