@@ -6,9 +6,11 @@ import { BASE_URL } from 'angular2-universal-preview/dist/server/src/http/node_h
 import * as ngUniversalRender from 'angular2-universal-preview/dist/server/src/render';
 import { App } from './components/app/app';
 
+ngCore.enableProdMode();
+
 export default function (params: any): Promise<{ html: string, globals?: any }> {
     const serverBindings = [
-        ngRouter.ROUTER_BINDINGS,
+        ngRouter.ROUTER_PROVIDERS,
         ngUniversal.HTTP_PROVIDERS,
         ngUniversal.SERVER_LOCATION_PROVIDERS,
         ngCore.provide(ngRouter.APP_BASE_HREF, { useValue: '/' }),
@@ -17,6 +19,11 @@ export default function (params: any): Promise<{ html: string, globals?: any }> 
     ];
 
     return ngUniversalRender.renderToString(App, serverBindings).then(html => {
-        return { html };
+        return {
+            html,
+            globals: {
+                jQuery: require('jquery')
+            }
+        };
     });
 }

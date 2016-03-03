@@ -8,6 +8,7 @@ var prodConfig = require('./webpack.config.prod');
 var isDevelopment = process.env.ASPNET_ENV === 'Development';
 
 module.exports = merge({
+    target: "web",
     resolve: {
         extensions: [ '', '.js', '.ts' ]
     },
@@ -19,12 +20,11 @@ module.exports = merge({
         ]
     },
     entry: {
-        main: ['./ClientApp/boot-client.ts']
+        worker: ['./ClientApp/boot-worker.ts']
     },
     output: {
         path: path.join(__dirname, 'wwwroot', 'dist'),
         filename: '[name].js',
-        chunkFileName: '[id].[name].js',
         publicPath: '/dist/'
     },
     plugins: [
@@ -35,3 +35,4 @@ module.exports = merge({
         })
     ]
 }, isDevelopment ? devConfig : prodConfig);
+

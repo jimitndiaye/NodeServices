@@ -15,7 +15,25 @@ module.exports = {
         ]
     },
     entry: {
-        vendor: ['angular2/bundles/angular2-polyfills.js', 'bootstrap', 'bootstrap/dist/css/bootstrap.css', 'style-loader', 'jquery', 'angular2/core', 'angular2/common', 'angular2/http', 'angular2/router', 'angular2/platform/browser']
+        vendor: [
+            'jquery', 
+            'bootstrap',
+            'bootstrap/dist/css/bootstrap.css',
+            'style-loader', 
+            //'angular2/bundles/angular2-polyfills.js',
+            //'angular2/core',
+            //'angular2/common', 
+            //'angular2/http', 
+            //'angular2/router', 
+            'es6-shim',
+            'es6-promise',
+            'reflect-metadata',
+            'zone.js/dist/zone-microtask',
+            'zone.js/dist/long-stack-trace-zone',
+            'angular2/core',
+            'angular2/router',
+            'angular2/platform/browser'
+        ]
     },
     output: {
         path: path.join(__dirname, 'wwwroot', 'dist'),
@@ -24,7 +42,7 @@ module.exports = {
     },
     plugins: [
         extractCSS,
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
+        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery', "window.jQuery": 'jquery', "global.jQuery": "jquery"  }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DllPlugin({
             path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
@@ -33,8 +51,8 @@ module.exports = {
     ].concat(isDevelopment ? [] : [
         new webpack.optimize.UglifyJsPlugin({
             compress: { warnings: false },
-            minimize: true,
-            mangle: true // Due to https://github.com/angular/angular/issues/6678
+            minimize: false,
+            mangle: false // Due to https://github.com/angular/angular/issues/6678
         })
     ])
 };
